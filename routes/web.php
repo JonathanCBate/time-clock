@@ -1,68 +1,44 @@
 <?php
-use App\Http\Controllers\StopwatchController;
+
+use App\Http\Controllers\ClockController;
 use App\Http\Controllers\ProfileController;
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/test-mail', function () {
+    $pdfPath = storage_path('app/public/work_time_report.pdf');
+    Mail::to('jonathanbate09@gmail.com')->send(new \App\Mail\sendCSVEmail($pdfPath));
+});
 
 
+Route::post('/send-pdf-email', [ClockController::class, 'sendCSVEmail'])->name('send_pdf_email');
+
+Route::get('/generate-pdf', [ClockController::class, 'generateCSV'])->name('generate_pdf');
+Route::get('/calendar', [ClockController::class, 'calendar'])->name('calendar');
+// Work Clock Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [ClockController::class, 'index'])->name('dashboard'); 
+    Route::post('/dashboard', [ClockController::class, 'post'])->name('post_data');
+});
+Route::post('/update_work_log/{id}', [ClockController::class, 'update'])->name('update_work_log');
+Route::delete('/work-log/{id}', [ClockController::class, 'destroy'])->name('work-log.destroy');
+Route::post('/work-log/bulk-delete', [ClockController::class, 'bulkDestroy'])->name('work-log.bulk-delete');
+Route::get('/weekly-total', [ClockController::class, 'getWeeklyTotal'])->name('get_weekly_total');
+
+Route::delete('/work-logs/{id}', [ClockController::class, 'destroy'])->name('work-logs.destroy');
 
 
+// Work Clock Page (Optional if not needed)
+Route::get('/work-clock', [ClockController::class, 'index']);
 
-
-
-
-Route::post('/save-color', [StopwatchController::class, 'saveColor'])->name('save.color');
-
-Route::get('/saved-times', [StopwatchController::class, 'index'])->name('saved-times');
-Route::post('/save-time', [StopwatchController::class, 'saveTime']);
-Route::post('/clear-saved-times', [StopwatchController::class, 'clearSavedTimes']);
-Route::get('/make-pdf', [StopwatchController::class, 'generatePDF'])->name('make-pdf');
-Route::post('/remove-image', [StopwatchController::class, 'removeImage'])->name('remove.image');
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::post('/email-pdf', [StopwatchController::class, 'emailPdf'])->name('email.pdf');
-Route::get('/clock',[StopwatchController::class, 'showClock'])->name('Clock');
-Route::get('/upload', [StopwatchController::class, 'showUploadForm'])->name('file.upload.form');
-Route::post('/upload', [StopwatchController::class, 'handleUpload'])->name('file.upload');
-
-
-Route::get('/uploaded-file', [StopwatchController::class, 'show'])->name('show.uploaded.file');
-
-Route::get('/email-form', function () {
-    return view('email_form'); 
-})->name('email_form');
-
-
-
-Route::get('/clock', [StopwatchController::class, 'showClock'])->name('show.clock');
-
-
-
-Route::get('/stopwatch', [StopwatchController::class, 'index'])->name('stopwatch.index');
-Route::post('/stopwatch/save-time', [StopwatchController::class, 'saveTime'])->name('stopwatch.saveTime');
-Route::get('/stopwatch/saved-times', [StopwatchController::class, 'showSavedTimes'])->name('stopwatch.showSavedTimes');
-Route::get('/stopwatch/generate-pdf', [StopwatchController::class, 'generatePdf'])->name('stopwatch.generatePdf');
-Route::post('/stopwatch/email-pdf', [StopwatchController::class, 'emailPdf'])->name('stopwatch.emailPdf');
-
-
-
-
-
-
-
-
+// Profile Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 });
 
 require __DIR__.'/auth.php';

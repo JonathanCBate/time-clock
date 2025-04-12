@@ -3,25 +3,21 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Session;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
+     * Register any application services.
      */
-    public function boot()
+    public function register(): void
     {
-        View::composer('*', function ($view) {
-            $view->with('color', Session::get('color', 'white'));
-        });
+        //
     }
 
     /**
-     * Register any application services.
+     * Bootstrap any application services.
      */
-    public function register()
+    public function boot(): void
     {
         //
     }
