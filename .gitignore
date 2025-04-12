@@ -1,3 +1,4 @@
+package-lock.json
 /.phpunit.cache
 /node_modules
 /public/build
