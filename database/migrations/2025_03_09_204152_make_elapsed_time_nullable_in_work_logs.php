@@ -9,16 +9,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('work_logs', function (Blueprint $table) {
-            $table->integer('elapsed_time')->nullable()->change();
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->integer('elapsed_time')->nullable()->change();                
         });
     }
 
     public function down()
     {
-        Schema::table('work_logs', function (Blueprint $table) {
-            $table->dropColumn(['start_time', 'end_time']);
+        Schema::table('work_logs', function (Blueprint $table) {        
             $table->integer('elapsed_time')->nullable(false)->change();
         });
     }
