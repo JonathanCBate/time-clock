@@ -2,11 +2,14 @@
 
 namespace App\Mail;
 
+
+
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class sendCSVEmail extends Mailable
+class SendCSVEmail extends Mailable
 {
     use Queueable, SerializesModels;
 

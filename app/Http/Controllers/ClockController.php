@@ -7,7 +7,8 @@ use App\Models\WorkLog;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\sendCSVEmail;
+use App\Mail\SendCSVEmail;
+
 
 class ClockController extends Controller
 {
