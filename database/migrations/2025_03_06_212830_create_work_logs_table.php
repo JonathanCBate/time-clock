@@ -13,7 +13,7 @@ return new class extends Migration
 {
     Schema::create('work_logs', function (Blueprint $table) {
         $table->id();
-        $table->string('work_description');
+        $table->text('work_description')->nullable(); 
         $table->integer('elapsed_time');
         $table->timestamps();
         $table->timestamp('start_time')->nullable();

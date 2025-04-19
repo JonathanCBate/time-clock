@@ -13,7 +13,7 @@ Route::get('/test-mail', function () {
     Mail::to('jonathanbate09@gmail.com')->send(new \App\Mail\sendCSVEmail($pdfPath));
 });
 
-
+Route::post('/work-logs/add-time', [ClockController::class, 'addTime'])->name('work-logs.add-time');
 Route::post('/send-pdf-email', [ClockController::class, 'sendCSVEmail'])->name('send_pdf_email');
 
 Route::get('/generate-pdf', [ClockController::class, 'generateCSV'])->name('generate_pdf');

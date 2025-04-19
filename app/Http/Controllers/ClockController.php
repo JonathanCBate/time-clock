@@ -12,6 +12,29 @@ use App\Mail\SendCSVEmail;
 
 class ClockController extends Controller
 {
+    public function addTime(Request $request)
+    {
+        $request->validate([
+            'minutes' => 'required|integer|min:1',
+            'description' => 'nullable|string',
+        ]);
+    
+        $now = Carbon::now();
+        $duration = $request->minutes * 60; // seconds
+    
+        WorkLog::create([
+            'user_id' => auth()->id(),
+            'elapsed_time' => $duration,
+            'work_description' => trim($request->description) ?: 'No description provided',
+            'start_time' => null,
+            'end_time' => null,
+            'logged_date' => $now->toDateString(),
+            'is_manual' => true,
+        ]);
+    
+        return back()->with('success', 'Time added!');
+    }
+    
     public function index()
     {
         $workLogs = $this->getWorkLogsForWeek();
@@ -23,28 +46,31 @@ class ClockController extends Controller
     }
 
     public function post(Request $request)
-    {
-        $request->validate([
-            'work_description' => 'nullable|string',
-            'elapsed_time' => 'required|integer|min:1'
-        ]);
+{
+    $request->validate([
+        'work_description' => 'nullable|string',
+        'elapsed_time' => 'required|integer|min:1'
+    ]);
 
-        $workLog = WorkLog::create([
-            'work_description' => $request->work_description,
-            'elapsed_time' => $request->elapsed_time
-        ]);
+    $workLog = WorkLog::create([
+        'user_id' => auth()->id(),
+        'work_description' => $request->work_description ?: 'No description provided',
+        'elapsed_time' => $request->elapsed_time,
+        'logged_date' => now()->toDateString(),
+    ]);
 
-        return response()->json([
-            'success' => true,
-            'work_description' => $workLog->work_description,
-            'created_at' => $workLog->created_at->format('l, F j, Y g:i A'),
-            'elapsed_time' => $workLog->elapsed_time,
-            'totalWeeklyTime' => gmdate('H:i:s', $this->getTotalWorkTimeForWeek()),
-            'totalWeeklyTimeSeconds' => $this->getTotalWorkTimeForWeek(),
-            'totalTimeForToday' => gmdate('H:i:s', $this->getTotalWorkTimeForToday()),
-            'totalTimeForTodaySeconds' => $this->getTotalWorkTimeForToday(),
-        ]);
-    }
+    return response()->json([
+        'success' => true,
+        'work_description' => $workLog->work_description,
+        'created_at' => $workLog->created_at->format('l, F j, Y g:i A'),
+        'elapsed_time' => $workLog->elapsed_time,
+        'totalWeeklyTime' => gmdate('H:i:s', $this->getTotalWorkTimeForWeek()),
+        'totalWeeklyTimeSeconds' => $this->getTotalWorkTimeForWeek(),
+        'totalTimeForToday' => gmdate('H:i:s', $this->getTotalWorkTimeForToday()),
+        'totalTimeForTodaySeconds' => $this->getTotalWorkTimeForToday(),
+    ]);
+}
+
 
     public function store(Request $request)
     {

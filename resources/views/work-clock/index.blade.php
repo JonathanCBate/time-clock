@@ -78,8 +78,9 @@
     <p>Press this button to record your work time</p>
     <button id="button" class="aligned-btn">Start</button>
     <h2 id="clock" style="font-size:40px;">00:00:00</h2>
+    <button onclick="addTime()">Add time</button>
 </div>
-
+<div id="addTime"></div>
 <!-- Work Log Form (no method needed since JS handles it) -->
 <form id="work-form">
     @csrf
@@ -113,6 +114,31 @@
 </form>
 
 <script>
+    function addTime() {
+    let container = document.getElementById('addTime');
+
+    if (container.innerHTML === '') {
+        container.innerHTML = `
+         <form  method="POST" action="{{ route('work-logs.add-time') }}">
+            @csrf
+            <div>
+                <label>Time to Add (in minutes)</label>
+                <input style="color:black; type="number" name="minutes" min="1" required>
+            </div>
+
+            <div>
+                <label>Description (optional)</label>
+                <input style="color:black; type="text" name="description">
+            </div>
+
+            <button type="submit">Add Time</button>
+        </form>   
+        `;
+    } else {
+        container.innerHTML = ''; 
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     let startTime = null; 
     let elapsedTime = 0;
