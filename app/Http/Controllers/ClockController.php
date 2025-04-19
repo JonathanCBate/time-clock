@@ -23,7 +23,6 @@ class ClockController extends Controller
         $duration = $request->minutes * 60; // seconds
     
         WorkLog::create([
-            'user_id' => auth()->id(),
             'elapsed_time' => $duration,
             'work_description' => trim($request->description) ?: 'No description provided',
             'start_time' => null,
