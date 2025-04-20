@@ -52,7 +52,6 @@ class ClockController extends Controller
     ]);
 
     $workLog = WorkLog::create([
-        'user_id' => auth()->id(),
         'work_description' => $request->work_description ?: 'No description provided',
         'elapsed_time' => $request->elapsed_time,
         'logged_date' => now()->toDateString(),
