@@ -19,10 +19,10 @@ class SendCSVEmail extends Mailable
 
     public function build()
     {
-        return $this->subject('Work Time CSV Report for ' . date('d-m-Y'))
+        return $this->subject('Work Time CSV Report for ' . date('Y-m-d'))
                     ->view('emails.CSV_report') // create this view for body
                     ->attach($this->csvPath, [
-                        'as' => 'work_time_report-' . date('d-m-Y') . '.csv',
+                        'as' => 'work_time_report_for ' . date('Y-m-d') . '.csv',
                         'mime' => 'text/csv',
                     ]);
     }
